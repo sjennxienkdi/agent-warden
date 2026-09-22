@@ -3,6 +3,9 @@ models/
 .venv/
 venv/
 
+# 求职策略文件（永不入库）
+RESUME.md
+
 # 原始观测数据（脱敏事件流可入库，原始抓包/日志永不入库）
 data/canary/*/raw/
 data/canary/**/raw/
