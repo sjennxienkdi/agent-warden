@@ -38,6 +38,10 @@ HARD_NEG_FAMILIES = [
 ATT_TLDS = ["quicksync.dev", "filepipe.io", "datasink.net", "stashbin.xyz",
             "dropvault.online", "sendpile.com", "mirrorage.top", "binvault.cn"]
 ATT_WORDS = ["cdn", "files", "sync", "data", "up", "store", "relay", "stash"]
+# 泛化探针用：与训练域池完全不相交的第二域名池（--fresh-hosts 启用）
+FRESH_TLDS = ["pipefast.net", "blobcave.org", "synctor.org", "heapstash.io",
+              "relaybin.app", "cratevault.dev", "dumpzone.info", "stashpile.cc"]
+FRESH_WORDS = ["get", "pull", "vault", "hoard", "pile", "crate", "dump", "bank"]
 
 
 def fake_host(rng: random.Random) -> str:
@@ -337,14 +341,20 @@ def verdict_json(risk: str, behavior_class: str, evidence: list[int], confidence
 
 
 def main() -> None:
+    global ATT_TLDS, ATT_WORDS
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="data/practice0")
     ap.add_argument("--attack-per-family", type=int, default=24)
     ap.add_argument("--benign-per-family", type=int, default=44)
     ap.add_argument("--val-frac", type=float, default=0.15)
+    ap.add_argument("--seed", type=int, default=SEED)
+    ap.add_argument("--fresh-hosts", action="store_true",
+                    help="泛化探针：换用与训练域池零重叠的第二域名池")
     args = ap.parse_args()
 
-    rng = random.Random(SEED)
+    if args.fresh_hosts:
+        ATT_TLDS, ATT_WORDS = FRESH_TLDS, FRESH_WORDS
+    rng = random.Random(args.seed)
     out = Path(args.out)
     samples: list[dict] = []
 
