@@ -1,0 +1,17 @@
+# 权重与大文件（不入 git）
+models/
+.venv/
+venv/
+
+# 原始观测数据（脱敏事件流可入库，原始抓包/日志永不入库）
+data/canary/*/raw/
+data/canary/**/raw/
+
+# 运行时产物
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.gguf
+*.safetensors
